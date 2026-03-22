@@ -14,18 +14,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2️⃣ Docker login (Secrets use)
+      # 2️⃣ Docker login
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # 3️⃣ Build Docker image
+      # 3️⃣ Build image
       - name: Build Docker image
         run: docker build -t shreejaadmin/flask-docker-demo:latest .
 
-      # 4️⃣ Push Docker image
+      # 4️⃣ Push image
       - name: Push Docker image
         run: docker push shreejaadmin/flask-docker-demo:latest
 
@@ -42,7 +42,6 @@ jobs:
             sudo systemctl start docker
             sudo systemctl enable docker
 
+            sudo docker rm -f flask_app || true
             sudo docker pull shreejaadmin/flask-docker-demo:latest
-            sudo docker stop flask_app || true
-            sudo docker rm flask_app || true
-            sudo docker run -d -p 80:80 --name flask_app shreejaadmin/flask-docker-demo:latest
+            sudo docker run -d -p 80:5000 --name flask_app shreejaadmin/flask-docker-demo:latest
